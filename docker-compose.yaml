@@ -1,0 +1,39 @@
+version: "3"
+services:
+ mqtt:
+      image: toke/mosquitto
+      network_mode: bridge
+      container_name: mqtt
+      expose:
+        - 1883
+      ports:
+        - 1883:1883
+      restart: unless-stopped
+
+ postgres:
+    image: postgres:latest
+    container_name: my_postgres
+    environment:
+      POSTGRES_DB: mydatabase
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+    ports:
+      - "5433:5432"  # Change host port to 5432
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      
+ postgres01:
+    image: postgres:latest
+    container_name: my_postgres01  # Change container_name to make it unique
+    environment:
+      POSTGRES_DB: mydatabase
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+    ports:
+      - "5434:5432"  # Change host port to 5433
+    volumes:
+      - postgres_data01:/var/lib/postgresql/data  # Change the volume name to make it unique
+
+volumes:
+  postgres_data:
+  postgres_data01:
