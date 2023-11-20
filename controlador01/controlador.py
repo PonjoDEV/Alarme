@@ -1,5 +1,9 @@
 import paho.mqtt.client as mqtt
 import rpyc
+from cryptography.fernet import Fernet
+encryption_key = 'g5rpWlh1x0cs27Uh9jf5Hs_GMUn5bPp-b_QfB_3h0jg='
+cipher_suite = Fernet(encryption_key)
+encrypted_value = cipher_suite.encrypt(b"#############")
 
 from conexaoDB import conexao
 
@@ -21,12 +25,16 @@ class Controlador1Service(rpyc.Service):
 
     def exposed_acionar_alarme(self):
         acao = "Ligar"
-        mqtt_client_controlador.publish(mqtt_topic_pub_atuador, acao)
+        acao_bytes = acao.encode('utf-8')
+        encrypted_value = cipher_suite.encrypt(acao_bytes)
+        mqtt_client_controlador.publish(mqtt_topic_pub_atuador, encrypted_value)
         conexao.conectadb(5433, True)
 
     def exposed_desativar_alarme(self):
         acao = "Desligar"
-        mqtt_client_controlador.publish(mqtt_topic_pub_atuador, acao)
+        acao_bytes = acao.encode('utf-8')
+        encrypted_value = cipher_suite.encrypt(acao_bytes)
+        mqtt_client_controlador.publish(mqtt_topic_pub_atuador, encrypted_value)
         conexao.conectadb(5433, False)
 
     #def exposed_aproximacao(self):

@@ -1,4 +1,26 @@
 import rpyc
+from cryptography.fernet import Fernet
+import random
+
+#definindo metodo de encriptação
+#encryption_key = Fernet.generate_key()
+encryption_key = 'g5rpWlh1x0cs27Uh9jf5Hs_GMUn5bPp-b_QfB_3h0jg='
+
+#criando um objeto Fernet
+cipher_suite = Fernet(encryption_key)
+hello = random.randint(0, 100)
+#convertendo texto para ciphertexto usando byte format "b"
+encrypted_value = cipher_suite.encrypt(hello)
+
+#print(encrypted_value)
+
+#remove o "b" do formato
+print(encrypted_value.decode())
+
+#decifrando mensagem
+decyphred_value = cipher_suite.decrypt(encrypted_value).decode()
+
+print(decyphred_value)
 
 
 class Controlador2Client:
